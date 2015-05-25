@@ -1,0 +1,30 @@
+config_eth0="172.30.0.124/24"
+config_eth1="192.168.55.244/24 fd21:d29:d77:8596::244/64"
+config_eth2="10.170.9.128/24"
+
+rules_eth0="
+to 172.22.0.0/16 table cba-traffic priority 400
+"
+routes_eth0="
+default via 172.30.0.1 dev eth0 table cba-traffic
+"
+rules_eth1="
+to 192.168.55.0/24 table ismgctraffic priority 100
+to 192.168.51.0/24 table ismgctraffic priority 500 
+"
+
+routes_eth1="
+to 192.168.51.0/24 via 192.168.55.254 table ismgctraffic
+default via 192.168.55.241 dev eth1 table ismgctraffic
+default via fd21:d29:d77:8596::1 dev eth1
+"
+
+rules_eth2=" 
+to 172.16.0.0/16 table oamtraffic priority 200 
+to 192.168.15.0/24 table oamtraffic priority 201
+to 10.175.0.0/16 table oamtraffic priority 202
+"
+
+routes_eth2="
+default via 10.170.9.1 dev eth2 table oamtraffic
+"

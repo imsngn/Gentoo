@@ -1,0 +1,23 @@
+$TTL 1W
+@       IN      SOA     iv.ims.cbc. vbox-03.iv.ims.cbc.  (
+                                      2008122601 ; Serial
+                                      28800      ; Refresh
+                                      14400      ; Retry
+                                      604800     ; Expire - 1 week
+                                      86400 )    ; Minimum
+ 		        NS      vbox-03.iv.ims.cbc.
+ 		        NS      ns1.iv.ims.cbc.
+ 		  	A	127.0.0.1
+ 		  	AAAA	::1
+
+
+vbox-03            IN      A       192.168.55.244
+ns1                IN      A       192.168.55.244
+is4mgc2            IN      A       192.168.51.131
+is4mgc1            IN      A       192.168.51.130
+is21mgc1           IN      A       192.168.55.4
+sippdocker         IN      A       192.168.55.244
+is21mgc2           IN      A       192.168.55.5
+cba-ebs6            IN      A       172.22.6.138
+cba-ebs1            IN      A       172.22.1.138
+

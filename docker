@@ -1,0 +1,17 @@
+# /etc/conf.d/docker: config file for /etc/init.d/docker
+
+# where the docker daemon output gets piped
+DOCKER_LOGFILE="/var/log/docker.log"
+
+# where docker's pid get stored
+DOCKER_PIDFILE="/run/docker.pid"
+
+# where the docker daemon itself is run from
+DOCKER_BINARY="/usr/bin/docker"
+
+# any other random options you want to pass to docker
+#DOCKER_OPTS="--storage-driver aufs --ipv6=true --fixed-cidr-v6=fd21:d29:d77:8596::201/125 "
+DOCKER_OPTS="--storage-driver aufs"
+#DOCKER_OPTS="--storage-driver btrfs"
+http_proxy="http://10.175.250.81:8080"
+https_proxy="http://10.175.250.81:8080"

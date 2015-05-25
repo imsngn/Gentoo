@@ -1,0 +1,17 @@
+$TTL 1W
+@       IN      SOA     duci.cbc.ericsson.se. vbox03.duci.cbc.ericsson.se.  (
+                                      2008122601 ; Serial
+                                      28800      ; Refresh
+                                      14400      ; Retry
+                                      604800     ; Expire - 1 week
+                                      86400 )    ; Minimum
+@		IN      NS      vbox03.duci.cbc.ericsson.se.
+@		IN	A	127.0.0.1
+@		IN	A	192.168.55.244 
+@		IN	AAAA	::1
+
+
+
+
+138             IN  PTR      cba-ebs6.duci.cbc.ericsson.se
+
