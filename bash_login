@@ -1,0 +1,171 @@
+#! /bin/bash
+
+function onlinelnstat() {
+	if [ $# -eq 7 ]; then
+		logfile=$1;
+		title01=$2;
+		title02=$3;
+		title03=$4;
+		title04=$5;
+		title05=$6;
+		title06=$7;
+	elif [ $# -ne 7 ]; then
+		read -p "logfile:" logfile;
+		read -p "title01:" title01;
+		read -p "title02:" title02;
+		read -p "title03:" title03;
+		read -p "title04:" title04;
+		read -p "title05:" title05;
+		read -p "title06:" title06;
+	fi
+	tail -F  $logfile|awk '{printf("%d:%d\n%d:%d\n%d:%d\n%d:%d\n%d:%d\n%d:%d\n",0,$1,1,$2,2,$3,3,$4,4,$5,5,$6);fflush(); }'|/usr/bin/driveGnuPlots.pl 6 500 500 500 500 500 500 $title01 $title02 $title03 $title04 $title05 $title06
+}
+function offlinelnstatdiff() {
+	if [ $# -eq 7 ]; then
+		logfile=$1;
+		title01=$2;
+		title02=$3;
+		title03=$4;
+		title04=$5;
+		title05=$6;
+		title06=$7;
+	elif [ $# -ne 7 ]; then
+		read -p "logfile:" logfile;
+		read -p "title01:" title01;
+		read -p "title02:" title02;
+		read -p "title03:" title03;
+		read -p "title04:" title04;
+		read -p "title05:" title05;
+		read -p "title06:" title06;
+	fi
+	tail -n +2 -F  $logfile|awk '{printf("%d:%d\n%d:%d\n%d:%d\n%d:%d\n%d:%d\n%d:%d\n",0,$1,1,$2,2,$3,3,$4,4,$5,5,$6);fflush(); }'|/usr/bin/driveGnuPlotsDiff.pl 6 300 300 300 300 300 300 $title01 $title02 $title03 $title04 $title05 $title06
+}
+function offlinelnstat() {
+	if [ $# -eq 7 ]; then
+		logfile=$1;
+		title01=$2;
+		title02=$3;
+		title03=$4;
+		title04=$5;
+		title05=$6;
+		title06=$7;
+	elif [ $# -ne 7 ]; then
+		read -p "logfile:" logfile;
+		read -p "title01:" title01;
+		read -p "title02:" title02;
+		read -p "title03:" title03;
+		read -p "title04:" title04;
+		read -p "title05:" title05;
+		read -p "title06:" title06;
+	fi
+	tail -n +2 -F  $logfile|awk '{printf("%d:%d\n%d:%d\n%d:%d\n%d:%d\n%d:%d\n%d:%d\n",0,$1,1,$2,2,$3,3,$4,4,$5,5,$6);fflush(); }'|/usr/bin/driveGnuPlots.pl 6 500 500 500 500 500 500 $title01 $title02 $title03 $title04 $title05 $title06
+}
+function onlineSbgMonitor() {
+	if [ $# -eq 3 ]; then
+		logfile=$1;
+		title01=$2;
+		title02=$3;
+	elif [ $# -ne 3 ]; then
+		read -p "logfile:" logfile;
+		read -p "title01:" title01;
+		read -p "title02:" title02;
+	fi
+	tail -F  $logfile|grep --line-buffered -v "^\s*$"|grep --line-buffered -v "vmstat"|grep --line-buffered "^\s*[0-9]"|awk '{printf("%d:%d\n%d:%.6f\n",0,100-$15,1,$4/1024);fflush(); }'|/usr/bin/driveGnuPlots.pl 2 1000 1000 $title01 $title02
+}
+function onlineBeamSizeMonitor() {
+	if [ $# -eq 2 ]; then
+		logfile=$1;
+		title=$2;
+	elif [ $# -ne 2 ]; then
+		read -p "logfile:" logfile;
+		read -p "title:" title;
+	fi
+	tail -F $logfile|grep  --line-buffered "currentBEAMsize_MB"|awk -F"," '{print $2;fflush()}'|awk -F"}" '{printf("%d:%d\n",0,$1);fflush()}' |/usr/bin/driveGnuPlots.pl 1 1000 $title
+}
+function onlineCpuMonitor() {
+	if [ $# -eq 2 ]; then
+		logfile=$1;
+		title=$2;
+	elif [ $# -ne 2 ]; then
+		read -p "logfile:" logfile;
+		read -p "title:" title;
+	fi
+	#tail -F $logfile|grep  --line-buffered "{idle,"|awk -F"," '{print $2;fflush()}'|awk -F"}" '{printf("%d:%d\n",0,100-$1);fflush()}' |/usr/bin/driveGnuPlots.pl 1 200 $title
+	 tail -F $logfile|grep --line-buffered "{idle,"|awk -F"idle" '{print $2;fflush()}'|awk -F"}" '{print $1;fflush()}'|awk -F"," '{printf("%d:%d\n",0,100-$2);fflush()}'|/usr/bin/driveGnuPlots.pl 1 1000 $title
+	 #tail -F $logfile|grep --line-buffered "{idle,"|awk -F"idle" '{print $2;fflush()}'|awk -F"}" '{print $1;fflush()}'|awk -F"," '{printf("%d:%d\n",0,100-$2);fflush()}'|/usr/bin/driveGnuPlots.pl 1 200 $title
+}
+function onlineRegMonitor() {
+	if [ $# -eq 2 ]; then
+		logfile=$1;
+		title=$2;
+	elif [ $# -ne 2 ]; then
+		read -p "logfile:" logfile;
+		read -p "title:" title;
+	fi
+	tail -F $logfile|grep  --line-buffered "Number of REG"|awk '{printf("%d:%d\n",0,$9);fflush(); }'|/usr/bin/driveGnuPlots.pl 1 1000 $title
+}
+function offlineRegMonitor() {
+	if [ $# -eq 2 ]; then
+		logfile=$1;
+		title=$2;
+	elif [ $# -ne 2 ]; then
+		read -p "logfile:" logfile;
+		read -p "title:" title;
+	fi
+	cat $logfile|grep  --line-buffered "Number of REG"|awk '{printf("%d:%d\n",0,$9);fflush(); }'|/usr/bin/driveGnuPlots.pl 1 1000 $title
+}
+function nf_conntrack() {
+	if [ $# -eq 2 ]; then
+		logfile=$1;
+		title=$2;
+	elif [ $# -ne 2 ]; then
+		read -p "logfile:" logfile;
+		read -p "title:" title;
+	fi
+	tail -F $logfile|awk -F'|' '{printf("%d:%d\n",0,$1);fflush(); }'|/usr/bin/driveGnuPlots.pl 1 1000 $title
+}
+function ip_route_show_cache() {
+	if [ $# -eq 2 ]; then
+		logfile=$1;
+		title=$2;
+	elif [ $# -ne 2 ]; then
+		read -p "logfile:" logfile;
+		read -p "title:" title;
+	fi
+	tail -n +2 -F $logfile|grep --line-buffered -e '^[0-9]'|awk -F'|' '{printf("%d:%d\n",0,$1);fflush(); }'|/usr/bin/driveGnuPlots.pl 1 500 $title
+}
+
+function onlineStackMonitor() {
+	if [ $# -eq 2 ]; then
+		logfile=$1;
+		title=$2;
+	elif [ $# -ne 2 ]; then
+		read -p "logfile:" logfile;
+		read -p "title:" title;
+	fi
+	tail -n 200 -F $logfile|awk -F, '/{stack_size/ {print $2;fflush()}'|awk -F'}' '{printf("%d:%d\n",0,$1);fflush(); }'|/usr/bin/driveGnuPlots.pl 1 1000 $title
+}
+
+function onlineHeapMonitor() {
+	if [ $# -eq 2 ]; then
+		logfile=$1;
+		title=$2;
+	elif [ $# -ne 2 ]; then
+		read -p "logfile:" logfile;
+		read -p "title:" title;
+	fi
+	tail -n 200 -F $logfile|awk -F, '/{heap_size/ {print $2;fflush()}'|awk -F'}' '{printf("%d:%d\n",0,$1);fflush(); }'|/usr/bin/driveGnuPlots.pl 1 1000 $title
+}
+
+function onlineMsgQueueMonitor() {
+	if [ $# -eq 2 ]; then
+		logfile=$1;
+		title=$2;
+	elif [ $# -ne 2 ]; then
+		read -p "logfile:" logfile;
+		read -p "title:" title;
+	fi
+	tail -n 200 -F $logfile|awk -F, '/{message_queue_len/ {print $2;fflush()}'|awk -F'}' '{printf("%d:%d\n",0,$1);fflush(); }'|/usr/bin/driveGnuPlots.pl 1 1000 $title
+	#cat $logfile|awk -F, '/{message_queue_len/ {print $2;fflush()}'|awk -F'}' '{printf("%d:%d\n",0,$1);fflush(); }'|/usr/bin/driveGnuPlots.pl 1 300 $title
+}
+
